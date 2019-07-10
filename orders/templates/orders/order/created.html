@@ -1,0 +1,41 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-top: 6%">
+            <div class="col-md-8 col-md-offset-2">
+                <h1>Thank You For Shopping With Us</h1>
+                <p>Your order has been successfully completed. Your order number is <strong>{{order.id }}</strong></p> 
+                <p>Here is your invoice: </p>
+                <hr>
+                    <h1 align="center">INVOICE</h1>
+                <div align="left">
+                    <p>First name: {{order.first_name}}</p>
+                    <p>Last name: {{order.last_name}}</p>
+                    <p>Email: {{order.email}}</p>
+                    <p>Address: {{order.address}}</p>
+                    <p>City: {{order.city}}</p>
+                    <p>Country: {{order.country}}</p>
+                    <p>Payment: {{order.payment}}</p>
+                    <p>Created at: {{order.created}}</p>
+                <div>
+                    <table class="table table-striped table-hover">
+                        <thead style="background-color: #5AC8FA">
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{item.name}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td>{{item.price}}</td>
+                            </tr>
+                        </tbody>   
+                </div>         
+            </div>
+        </div>
+    </div>
+{% endblock %}

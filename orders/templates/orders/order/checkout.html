@@ -1,0 +1,36 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}
+    Your Shopping Cart| Checkout
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-top: 6%">
+            <div class="col-md-8">
+                <h1 class="page-header">CHECKOUT FORM</h1>
+                <form action="." method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}<br>
+                    <a href="{% url 'orders:payment' %}"><button>Proceed to payment</button></a>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <div class="page-header">
+                    <h1 align="center">Your Order</h1>
+                </div>
+                <button><a href="{% url 'cart:cart_detail' %}">Edit</a></button>
+                <ul class="list-group">
+                    {% for item in cart %}
+                        <li class="list-group-item">
+                        {{ item.quantity }} x {{ item.product.name }}
+                        <p>Provide by Hung's store  =  ${{item.total_price}}</p>
+                        <p>Discount: ${{ item.total_discount_price }}</p>
+                        </li>
+                    {% endfor %}                    
+                <li class="list-group-item active">Total Cost: ${{ cart.get_total_price }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

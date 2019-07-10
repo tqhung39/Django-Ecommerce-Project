@@ -1,0 +1,22 @@
+{% extends 'shop/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+    Your Shopping Cart| Checkout
+{% endblock %}
+
+{% block content %}
+<main>
+        <div class="container">
+    
+        <h2>REQUEST REFUND FORM</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type='submit' class='btn btn-primary'>Submit</button>
+        </form>
+    
+        </div>
+      </main>
+    
+{% endblock %}
