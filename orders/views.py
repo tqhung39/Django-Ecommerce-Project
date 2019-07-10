@@ -110,12 +110,6 @@ def charge(request):
         )
     return redirect('orders:invoice')
 
-# def refund(request):
-#     if request.method == 'POST' :
-#         refund = stripe.Refund.create(
-#             charage = 'ch_1EuFCQGrA3QmcRSL0sAWL9HE'
-#         )
-#     return render(request, 'orders/refund1.html')
 
 
 class GeneratePDF(View):
