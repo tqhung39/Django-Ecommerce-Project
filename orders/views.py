@@ -44,10 +44,10 @@ class RequestRefundView(View):
                 refund.reason = message
                 refund.email = email
                 refund.save()
-                message.info(self.request, "Your request has been received.")
+                messages.info(self.request, "Your request has been received.")
                 return redirect("orders:refund")
             except ObjectDoesNotExist:
-                message.info(self.request, "This order is not exist.")
+                messages.info(self.request, "This order is not exist.")
                 return redirect("orders:refund")
 
 def checkout(request):
@@ -56,6 +56,8 @@ def checkout(request):
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
+            order.refund_code = create_refund_code()
+            order.save()
             for item in cart:
                 OrderItem.objects.create(
                     order=order,
@@ -77,6 +79,8 @@ def cash(request):
         form = OrderCreateForm(request.POST)
         if form.is_valid():
             order = form.save()
+            order.refund_code = create_refund_code()
+            order.save()
             for item in cart:
                 OrderItem.objects.create(
                     order=order,
