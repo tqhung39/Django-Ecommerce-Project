@@ -21,6 +21,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def create_refund_code():
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+    
 
 class RequestRefundView(View):
     def get(self, *args, **kwargs):
@@ -37,18 +38,20 @@ class RequestRefundView(View):
             email = form.cleaned_data.get('email')
             try:
                 order = Order.objects.get(refund_code = refund_code)
-                order.refund_requested = True
+                order.refund_request = True
                 order.save()
                 refund = Refund()
                 refund.order = order
                 refund.reason = message
                 refund.email = email
                 refund.save()
+
                 messages.info(self.request, "Your request has been received.")
-                return redirect("orders:refund")
+                return redirect('orders:refund-done')
+                
             except ObjectDoesNotExist:
                 messages.info(self.request, "This order is not exist.")
-                return redirect("orders:refund")
+                return redirect("shop:product_list")
 
 def checkout(request):
     cart = Cart(request)
@@ -64,7 +67,7 @@ def checkout(request):
                     product=item['product'],
                     price=item['price'],
                     discount_price=item['discount_price'],
-                    quantity=item['quantity']
+                    quantity=item['quantity'],
                 )
             cart.clear()
         return redirect('orders:payment')
@@ -114,7 +117,8 @@ def charge(request):
         )
     return redirect('orders:invoice')
 
-
+def refund_done(request):
+    return render(request,'orders/refund_done.html')
 
 class GeneratePDF(View):
     def get(self, request, *args, **kwargs):
@@ -132,6 +136,8 @@ class GeneratePDF(View):
         today = order[0].created
         item = orderitem[0].product 
         quantity = orderitem[0].quantity 
+        item_1 = orderitem[1].product
+        quantity_1 = orderitem[1].quantity
         template = get_template('invoice.html')
         context = {
             "invoice_id": id,
@@ -146,6 +152,8 @@ class GeneratePDF(View):
             "quantity": quantity,
             "amount": amount,
             "today": today,
+            "item1": item_1,
+            "quantity1": quantity_1,
         }
         html = template.render(context)
         pdf = render_to_pdf('invoice.html', context)
